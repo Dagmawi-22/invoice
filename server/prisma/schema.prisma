@@ -13,26 +13,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-You are tasked with building a simple full-stack application called "Invoice Manager."
-The application should allow users to create, view, update, and delete invoices. Each
-invoice should include invoice number, client information, an itemized list of
-products/services, total amount, and due date.
-
-model Client {
-  id        String     @id @default(uuid())
-  name      String
-  email     String
-  address   String
-  invoices  Invoice[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
 
 model Invoice {
   id         String   @id @default(uuid())
-  invoiceNumber String @unique
-  clientId   String
-  client     Client   @relation(fields: [clientId], references: [id])
   items      Item[]
   totalAmount Float
   dueDate    DateTime

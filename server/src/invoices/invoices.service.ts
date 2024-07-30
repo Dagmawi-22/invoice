@@ -1,26 +1,79 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 
 @Injectable()
 export class InvoicesService {
-  create(createInvoiceDto: CreateInvoiceDto) {
-    return 'This action adds a new invoice';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createInvoiceDto: CreateInvoiceDto) {
+    const { items, ...invoiceData } = createInvoiceDto;
+
+    const invoice = await this.prisma.invoice.create({
+      data: {
+        ...invoiceData,
+        items: {
+          create: items,
+        },
+      },
+      include: {
+        items: true,
+      },
+    });
+
+    return invoice;
   }
 
-  findAll() {
-    return `This action returns all invoices`;
+  async findAll() {
+    return await this.prisma.invoice.findMany({
+      include: {
+        items: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} invoice`;
+  async findOne(id: string) {
+    const invoice = await this.prisma.invoice.findUnique({
+      where: { id },
+      include: { items: true },
+    });
+
+    if (!invoice) {
+      throw new Error(`Invoice with ID ${id} not found`);
+    }
+
+    return invoice;
   }
 
-  update(id: number, updateInvoiceDto: UpdateInvoiceDto) {
-    return `This action updates a #${id} invoice`;
+  async update(id: string, updateInvoiceDto: UpdateInvoiceDto) {
+    const { items, ...invoiceData } = updateInvoiceDto;
+
+    const invoice = await this.prisma.invoice.update({
+      where: { id },
+      data: {
+        ...invoiceData,
+        items: {
+          deleteMany: {},
+          create: items,
+        },
+      },
+      include: {
+        items: true,
+      },
+    });
+
+    return invoice;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} invoice`;
+  async remove(id: string) {
+    const invoice = await this.prisma.invoice.delete({
+      where: { id },
+      include: {
+        items: true,
+      },
+    });
+
+    return invoice;
   }
 }
