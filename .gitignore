@@ -1,0 +1,3 @@
+# hide env files
+client/.env
+server/.env

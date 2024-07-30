@@ -12,3 +12,24 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
+model Invoice {
+  id         String   @id @default(uuid())
+  items      Item[]
+  totalAmount Float
+  dueDate    DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Item {
+  id         String   @id @default(uuid())
+  description String
+  quantity   Int
+  price      Float
+  invoiceId  String
+  invoice    Invoice  @relation(fields: [invoiceId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
