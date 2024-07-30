@@ -1,5 +1,10 @@
 {
-  "name": "client",
+  "name": "invoice-client",
+  "developer": {
+    "name": "Dagmawi Teka",
+    "email": "dagmawi.teka22@gmail.com",
+    "website": "https://dagmawi-teka.vercel.app"
+  },
   "version": "0.1.0",
   "private": true,
   "scripts": {
