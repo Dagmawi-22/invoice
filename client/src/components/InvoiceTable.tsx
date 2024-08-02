@@ -1,4 +1,7 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import DataTable from "react-data-table-component";
 import { Invoice } from "@/app/interfaces/interface";
 
 interface InvoiceTableProps {
@@ -6,51 +9,61 @@ interface InvoiceTableProps {
 }
 
 const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices }) => {
+  const [filterText, setFilterText] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const filteredInvoices = isMounted
+    ? invoices.filter((invoice) =>
+        invoice.clientName.toLowerCase().includes(filterText.toLowerCase())
+      )
+    : invoices;
+
+  const columns = [
+    {
+      name: "Invoice Number",
+      selector: (row: Invoice) => row.invoiceNumber,
+      sortable: true,
+    },
+    {
+      name: "Client Name",
+      selector: (row: Invoice) => row.clientName,
+      sortable: true,
+    },
+    {
+      name: "Total Amount",
+      selector: (row: Invoice) => row.totalAmount,
+      sortable: true,
+      right: true,
+    },
+    {
+      name: "Due Date",
+      selector: (row: Invoice) => row.dueDate,
+      sortable: true,
+    },
+  ];
+
   return (
-    <div className="container mx-auto p-4">
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-          <thead className="bg-gray-800 text-white">
-            <tr>
-              <th className="px-4 py-2 border text-left">Invoice Number</th>
-              <th className="px-4 py-2 border text-left">Client Name</th>
-              <th className="px-4 py-2 border text-left">Items</th>
-              <th className="px-4 py-2 border text-left">Total Amount</th>
-              <th className="px-4 py-2 border text-left">Due Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoices.map((invoice, index) => (
-              <tr
-                key={index}
-                className="bg-white hover:bg-gray-100 transition-colors duration-200"
-              >
-                <td className="px-4 py-2 border text-gray-700">
-                  {invoice.invoiceNumber}
-                </td>
-                <td className="px-4 py-2 border text-gray-700">
-                  {invoice.clientName}
-                </td>
-                <td className="px-4 py-2 border text-gray-700">
-                  <ul>
-                    {invoice.items.map((item, itemIndex) => (
-                      <li key={itemIndex}>
-                        {item.description} - ${item.amount}
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-                <td className="px-4 py-2 border text-gray-700">
-                  ${invoice.totalAmount.toFixed(2)}
-                </td>
-                <td className="px-4 py-2 border text-gray-700">
-                  {invoice.dueDate}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div>
+      <input
+        type="text"
+        placeholder="Filter by client name"
+        value={filterText}
+        onChange={(e) => setFilterText(e.target.value)}
+        className="border border-gray-300 p-2 px-5 rounded-md mb-4 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 shadow-md placeholder-gray-500"
+      />
+
+      <DataTable
+        title="Invoices"
+        columns={columns}
+        data={filteredInvoices}
+        pagination
+        highlightOnHover
+        selectableRows
+      />
     </div>
   );
 };

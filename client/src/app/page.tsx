@@ -28,8 +28,10 @@ const sampleInvoices: Invoice[] = [
 
 const Home: React.FC = () => {
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-center my-4">Invoice Listing</h1>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold text-center my-4 text-gray-700">
+        Invoice Listing
+      </h1>
       <InvoiceTable invoices={sampleInvoices} />
     </div>
   );
