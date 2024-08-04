@@ -33,17 +33,9 @@ const InvoiceTable: React.FC<{ invoices: Invoice[] }> = ({ invoices }) => {
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Filter by client name"
-        value={filterText}
-        onChange={(e) => setFilterText(e.target.value)}
-        className="border border-gray-300 p-2 rounded-lg mb-4 text-black transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transform focus:scale-105 shadow-lg"
-      />
-
       <DataTable
         columns={columns}
-        data={filteredInvoices}
+        data={invoices}
         pagination
         className="shadow-lg rounded-md"
       />

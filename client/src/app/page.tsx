@@ -4,10 +4,13 @@ import React, { useEffect, useState } from "react";
 import InvoiceTable from "../components/InvoiceTable";
 import { Invoice } from "./interfaces/interface";
 import API_BASE_URL from "../../public/config";
+import Button from "@/components/Button";
+import Header from "@/components/Header";
 
 const Home: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [filterText, setFilterText] = useState("");
 
   useEffect(() => {
     const fetchInvoices = async () => {
@@ -30,19 +33,28 @@ const Home: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  const filteredInvoices = invoices.filter((invoice) =>
+    invoice.id.toLowerCase().includes(filterText.toLowerCase())
+  );
+
   return (
     <>
-      <header className="bg-indigo-600 text-white p-4 shadow-lg">
-        <div className="container mx-auto flex items-center justify-between">
-          <div className="flex items-center">
-            <span className="text-2xl font-bold">INVOICE</span>
-          </div>
-          <nav className="flex space-x-4"></nav>
-        </div>
-      </header>
+      <Header />
+      <div className="flex justify-between items-center p-4">
+        <input
+          type="text"
+          placeholder="Filter by id"
+          value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}
+          className="border h-9 border-gray-300 p-2 rounded-lg text-black transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transform focus:scale-105 shadow-lg"
+        />
+        <Button variant="primary" size="small" onClick={() => {}}>
+          Add Invoice
+        </Button>
+      </div>
 
       <div className="p-8">
-        <InvoiceTable invoices={invoices} />
+        <InvoiceTable invoices={filteredInvoices} />
       </div>
     </>
   );
