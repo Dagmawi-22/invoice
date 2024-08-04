@@ -8,7 +8,7 @@ import Button from "@/components/Button";
 import Header from "@/components/Header";
 import AddInvoiceModal from "@/components/InvoiceForm";
 import { IoIosAdd } from "react-icons/io";
-import { FaFileExport } from "react-icons/fa"
+import { FaFileExport } from "react-icons/fa";
 import SearchBar from "@/components/Searchbar";
 import { getInvoices } from "@/helpers/helper.service";
 import { handleExportToExcel } from "@/helpers/utils";
@@ -132,19 +132,9 @@ const Home: React.FC = () => {
   return (
     <>
       <Header />
-      <div className="flex justify-between items-center p-8">
+      <div className="flex justify-between flex-wrap items-center p-8">
         <SearchBar value={filterText} onChange={setFilterText} />
-        <div className="flex flex-row gap-2">
-          <Button
-            variant="secondary"
-            size="small"
-            onClick={() => {filteredInvoices?.length>0 && handleExportToExcel(filteredInvoices)}}
-          >
-            <div className="flex flex-row gap-1">
-               <FaFileExport />
-              <span className="text-xs">Export</span>
-            </div>
-          </Button>
+        <div className="flex flex-row gap-2 mt-2">
           <Button variant="primary" size="small" onClick={handleAddInvoice}>
             <div className="flex flex-row gap-1">
               <IoIosAdd />
@@ -154,7 +144,25 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-8">
+      {!!filteredInvoices.length && (
+        <div className="flex justify-end px-8 py-3">
+          <Button
+            variant="secondary"
+            size="small"
+            onClick={() => {
+              filteredInvoices?.length > 0 &&
+                handleExportToExcel(filteredInvoices);
+            }}
+          >
+            <div className="flex flex-row gap-1">
+              <FaFileExport />
+              <span className="text-xs">Export</span>
+            </div>
+          </Button>
+        </div>
+      )}
+
+      <div className="px-8 py-2">
         <InvoiceTable
           invoices={filteredInvoices}
           onEdit={handleEditInvoice}
