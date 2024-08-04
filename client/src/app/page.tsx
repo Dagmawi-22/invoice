@@ -137,7 +137,7 @@ const Home: React.FC = () => {
           <Button
             variant="secondary"
             size="small"
-            onClick={() => handleExportToExcel(filteredInvoices)}
+            onClick={() => {filteredInvoices?.length>0 && handleExportToExcel(filteredInvoices)}}
           >
             <div className="flex flex-row gap-1">
               <IoIosAdd />
