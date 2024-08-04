@@ -13,8 +13,8 @@ const Home: React.FC = () => {
     const fetchInvoices = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/invoices`);
-        console.log("dataa", response?.json());
         const data: Invoice[] = await response.json();
+        console.log("dataa", data);
         setInvoices(data);
       } catch (error) {
         console.error("Failed to fetch invoices", error);

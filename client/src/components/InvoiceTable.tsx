@@ -13,12 +13,16 @@ const InvoiceTable: React.FC<{ invoices: Invoice[] }> = ({ invoices }) => {
   }, []);
 
   const filteredInvoices = invoices.filter((invoice) =>
-    invoice.clientName.toLowerCase().includes(filterText.toLowerCase())
+    invoice.id.toLowerCase().includes(filterText.toLowerCase())
   );
 
   const columns = [
-    { name: "Invoice Number", selector: (row: Invoice) => row.invoiceNumber },
-    { name: "Client Name", selector: (row: Invoice) => row.clientName },
+    { name: "Invoice Number", selector: (row: Invoice) => row.id },
+    {
+      name: "Items",
+      selector: (row: Invoice) =>
+        row.items.map((item) => item.description).join(", "),
+    },
     { name: "Total Amount", selector: (row: Invoice) => row.totalAmount },
     { name: "Due Date", selector: (row: Invoice) => row.dueDate },
   ];
