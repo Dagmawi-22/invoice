@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import Header from "@/components/Header";
 import AddInvoiceModal from "@/components/InvoiceForm";
 import { IoIosAdd } from "react-icons/io";
+import { FaFileExport } from "react-icons/fa"
 import SearchBar from "@/components/Searchbar";
 import { getInvoices } from "@/helpers/helper.service";
 import { handleExportToExcel } from "@/helpers/utils";
@@ -140,8 +141,8 @@ const Home: React.FC = () => {
             onClick={() => {filteredInvoices?.length>0 && handleExportToExcel(filteredInvoices)}}
           >
             <div className="flex flex-row gap-1">
-              <IoIosAdd />
-              <span className="text-xs">Export as excel</span>
+               <FaFileExport />
+              <span className="text-xs">Export</span>
             </div>
           </Button>
           <Button variant="primary" size="small" onClick={handleAddInvoice}>
