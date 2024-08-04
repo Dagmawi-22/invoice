@@ -6,11 +6,25 @@ import { Invoice } from "./interfaces/interface";
 import API_BASE_URL from "../../public/config";
 import Button from "@/components/Button";
 import Header from "@/components/Header";
+import AddInvoiceModal from "@/components/InvoiceForm";
 
 const Home: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [filterText, setFilterText] = useState("");
+
+  const [showModal, setShowModal] = useState(false);
+  const [invoiceData, setInvoiceData] = useState(null);
+
+  const handleAddInvoice = () => {
+    setInvoiceData(null); // Clear data for new invoice
+    setShowModal(true);
+  };
+
+  const handleEditInvoice = (data: any) => {
+    setInvoiceData(data); // Set data for editing
+    setShowModal(true);
+  };
 
   useEffect(() => {
     const fetchInvoices = async () => {
@@ -48,7 +62,7 @@ const Home: React.FC = () => {
           onChange={(e) => setFilterText(e.target.value)}
           className="border h-9 border-gray-300 p-2 rounded-lg text-black transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transform focus:scale-105 shadow-lg"
         />
-        <Button variant="primary" size="small" onClick={() => {}}>
+        <Button variant="primary" size="small" onClick={handleAddInvoice}>
           Add Invoice
         </Button>
       </div>
@@ -56,6 +70,12 @@ const Home: React.FC = () => {
       <div className="p-8">
         <InvoiceTable invoices={filteredInvoices} />
       </div>
+
+      <AddInvoiceModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        initialData={invoiceData}
+      />
     </>
   );
 };
