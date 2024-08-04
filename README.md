@@ -8,7 +8,7 @@
 
 
 
-# Tools used
+### Tools used
 
 - Next.js (14) - for building the UI
 - Tailwind Css - for a nice looking UI without a native css
