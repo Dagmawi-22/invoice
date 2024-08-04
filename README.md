@@ -33,7 +33,7 @@ Make sure you have the following installed:
 
 #### Clone the Repository
 
-First,open you terminal window & clone this repository to your local machine:
+First, open you terminal window & clone this repository to your local machine:
 ```bash
 git clone https://github.com/Dagmawi-22/invoice.git
 ```
