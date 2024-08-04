@@ -19,7 +19,10 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
   const initialValues = {
     items: initialData?.items || [{ description: "", quantity: 1, price: 0 }],
     totalAmount: initialData?.totalAmount || 0,
-    dueDate: initialData?.dueDate ? initialData.dueDate.split("T")[0] : "",
+    dueDate:
+      typeof initialData?.dueDate === "string"
+        ? initialData.dueDate.split("T")[0]
+        : initialData?.dueDate,
   };
 
   const validationSchema = Yup.object({
