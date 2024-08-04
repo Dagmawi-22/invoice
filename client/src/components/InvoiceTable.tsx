@@ -4,17 +4,21 @@ import { Invoice } from "@/app/interfaces/interface";
 import dayjs from "dayjs";
 import Button from "./Button";
 import { MdDeleteOutline, MdModeEditOutline } from "react-icons/md";
+import { formatCurrency } from "@/helpers/utils";
+import { BiPrinter } from "react-icons/bi";
 
 interface InvoiceTableProps {
   invoices: Invoice[];
   onEdit: (invoice: Invoice) => void;
   onDelete: (invoiceId: string) => void;
+  onPrint: (invoiceId: string) => void;
 }
 
 const InvoiceTable: React.FC<InvoiceTableProps> = ({
   invoices,
   onEdit,
   onDelete,
+  onPrint,
 }) => {
   const columns = [
     { name: "Invoice Number", selector: (row: Invoice) => row.id },
@@ -23,7 +27,10 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
       selector: (row: Invoice) =>
         row.items.map((item) => item.description).join(", "),
     },
-    { name: "Total Amount", selector: (row: Invoice) => row.totalAmount },
+    {
+      name: "Total Amount",
+      selector: (row: Invoice) => formatCurrency(row.totalAmount),
+    },
     {
       name: "Due Date",
       selector: (row: Invoice) =>
@@ -33,12 +40,23 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
       name: "Actions",
       cell: (row: Invoice) => (
         <div className="flex space-x-2">
+          <Button
+            size="small"
+            variant="secondary"
+            onClick={() => onPrint(row.id)}
+          >
+            <div className="flex flex-row gap-1">
+              <BiPrinter />
+              <span className="text-xs">Print</span>
+            </div>
+          </Button>
           <Button size="small" variant="primary" onClick={() => onEdit(row)}>
             <div className="flex flex-row gap-1">
               <MdModeEditOutline />
               <span className="text-xs">Edit</span>
             </div>
           </Button>
+
           <Button
             size="small"
             variant="danger"

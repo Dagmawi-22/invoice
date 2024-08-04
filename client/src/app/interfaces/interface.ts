@@ -3,13 +3,20 @@ export interface Invoice {
   items: Item[];
   totalAmount: number;
   dueDate: string;
-}
-
-export interface Item {
-  description: string;
-  amount: number;
-  id: string;
-  invoiceId: string;
   createdAt: string;
   updatedAt: string | null;
+}
+
+export interface ItemForm {
+  description: string;
+  quantity: number;
+  price: number;
+}
+
+export interface Item extends ItemForm {
+  id: string;
+  amount?: number;
+  invoiceId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

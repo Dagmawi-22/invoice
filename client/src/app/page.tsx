@@ -10,6 +10,7 @@ import AddInvoiceModal from "@/components/InvoiceForm";
 import { IoIosAdd } from "react-icons/io";
 import SearchBar from "@/components/Searchbar";
 import { getInvoices } from "@/helpers/helper.service";
+import { handleExportToExcel } from "@/helpers/utils";
 
 const Home: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -20,13 +21,17 @@ const Home: React.FC = () => {
   const [invoiceData, setInvoiceData] = useState<Invoice | null>(null);
 
   const handleAddInvoice = () => {
-    setInvoiceData(null); // Clear previous data for new invoice
+    setInvoiceData(null);
     setShowModal(true);
   };
 
   const handleEditInvoice = (data: Invoice) => {
-    setInvoiceData(data); // Set data for editing
+    setInvoiceData(data);
     setShowModal(true);
+  };
+
+  const handlePrintInvoice = (id: string) => {
+    console.log("yeye");
   };
 
   const handleDeleteInvoice = async (invoiceId: string) => {
@@ -76,6 +81,7 @@ const Home: React.FC = () => {
 
         if (response.ok) {
           const updatedData = await response.json();
+
           setInvoices((prev) =>
             prev.map((inv) => (inv.id === updatedData.id ? updatedData : inv))
           );
@@ -129,12 +135,24 @@ const Home: React.FC = () => {
       <Header />
       <div className="flex justify-between items-center p-8">
         <SearchBar value={filterText} onChange={setFilterText} />
-        <Button variant="primary" size="small" onClick={handleAddInvoice}>
-          <div className="flex flex-row gap-1">
-            <IoIosAdd />
-            <span className="text-xs">Add Invoice</span>
-          </div>
-        </Button>
+        <div className="flex flex-row gap-2">
+          <Button
+            variant="secondary"
+            size="small"
+            onClick={() => handleExportToExcel(filteredInvoices)}
+          >
+            <div className="flex flex-row gap-1">
+              <IoIosAdd />
+              <span className="text-xs">Export as excel</span>
+            </div>
+          </Button>
+          <Button variant="primary" size="small" onClick={handleAddInvoice}>
+            <div className="flex flex-row gap-1">
+              <IoIosAdd />
+              <span className="text-xs">Add invoice</span>
+            </div>
+          </Button>
+        </div>
       </div>
 
       <div className="p-8">
@@ -142,6 +160,7 @@ const Home: React.FC = () => {
           invoices={filteredInvoices}
           onEdit={handleEditInvoice}
           onDelete={handleDeleteInvoice}
+          onPrint={handlePrintInvoice}
         />
       </div>
 

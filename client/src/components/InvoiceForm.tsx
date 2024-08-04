@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { Formik, Field, FieldArray, Form as FormikForm } from "formik";
 import * as Yup from "yup";
-import { Invoice, Item } from "@/app/interfaces/interface";
+import { Invoice, Item, ItemForm } from "@/app/interfaces/interface";
 
 interface AddInvoiceModalProps {
   show: boolean;
@@ -44,8 +44,14 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg w-96 p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-7000 ease-in-out">
+      <div
+        className={`bg-white rounded-lg shadow-lg w-96 p-6 transform transition-all duration-300 ease-in-out ${
+          show
+            ? "translate-y-0 opacity-100 mb-0"
+            : "translate-y-4 opacity-0 mb-4"
+        }`}
+      >
         <h2 className="text-lg font-semibold mb-4">
           {initialData ? "Update Invoice" : "Add Invoice"}
         </h2>
@@ -59,7 +65,7 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
               <FieldArray name="items">
                 {({ push, remove }) => (
                   <>
-                    {values.items.map((item: Item[], index: number) => (
+                    {values.items.map((item: ItemForm, index: number) => (
                       <div key={index} className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">
                           Item Description
@@ -120,7 +126,7 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
                     <button
                       type="button"
                       onClick={() =>
-                        push({ description: "", quantity: 1, price: 0 })
+                        push({ description: "", quantity: 1, price: 0 } as Item)
                       }
                       className="bg-indigo-600 text-white rounded px-4 py-2 mb-4"
                     >
@@ -129,6 +135,7 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
                   </>
                 )}
               </FieldArray>
+
               <label className="block text-sm font-medium text-gray-700">
                 Total Amount
               </label>
