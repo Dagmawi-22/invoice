@@ -17,11 +17,11 @@
 - PostgreSql - for storing data
 - Swagger - for documenting the Nest.js API
 
-# How to run the app locally
+### How to run the app locally
 
 To run this project locally on your machine, follow these steps:
 
-### Prerequisites
+#### Prerequisites
 
 Make sure you have the following installed:
 - Node.js
@@ -29,7 +29,7 @@ Make sure you have the following installed:
 - postgresql 
   
 
-### Clone the Repository
+#### Clone the Repository
 
 First, clone this repository to your local machine:
 ```bash
