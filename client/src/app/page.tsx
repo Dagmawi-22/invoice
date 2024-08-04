@@ -18,12 +18,12 @@ const Home: React.FC = () => {
   const [invoiceData, setInvoiceData] = useState<Invoice | null>(null);
 
   const handleAddInvoice = () => {
-    setInvoiceData(null); // Clear data for new invoice
+    setInvoiceData(null);
     setShowModal(true);
   };
 
   const handleEditInvoice = (data: Invoice) => {
-    setInvoiceData(data); // Set data for editing
+    setInvoiceData(data);
     setShowModal(true);
   };
 

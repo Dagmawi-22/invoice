@@ -6,6 +6,7 @@ import { Invoice } from "@/app/interfaces/interface";
 import Button from "@/components/Button";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin6Fill } from "react-icons/ri";
+import dayjs from "dayjs";
 
 const InvoiceTable: React.FC<{
   invoices: Invoice[];
@@ -26,7 +27,11 @@ const InvoiceTable: React.FC<{
         row.items.map((item) => item.description).join(", "),
     },
     { name: "Total Amount", selector: (row: Invoice) => row.totalAmount },
-    { name: "Due Date", selector: (row: Invoice) => row.dueDate },
+    {
+      name: "Due Date",
+      selector: (row: Invoice) =>
+        dayjs(new Date(row.dueDate)).format("MMM D, YYYY, HH:mm:ss a"),
+    },
     {
       name: "Actions",
       cell: (row: Invoice) => (

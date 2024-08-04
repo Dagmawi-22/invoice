@@ -4,5 +4,5 @@ export interface Invoice {
   clientName: string;
   items: { description: string; amount: number }[];
   totalAmount: number;
-  dueDate: string;
+  dueDate: string | Date;
 }
