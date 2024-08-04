@@ -1,17 +1,20 @@
 import React, { ReactNode } from "react";
 import { Formik, Field, FieldArray, Form as FormikForm } from "formik";
 import * as Yup from "yup";
+import { Invoice, Item } from "@/app/interfaces/interface";
 
 interface AddInvoiceModalProps {
   show: boolean;
   handleClose: () => void;
-  initialData: any;
+  initialData: Invoice | null;
+  onSubmit: (invoice: Invoice) => Promise<void>;
 }
 
 const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
   show,
   handleClose,
   initialData,
+  onSubmit,
 }) => {
   const initialValues = {
     items: initialData?.items || [{ description: "", quantity: 1, price: 0 }],
@@ -33,8 +36,8 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
     dueDate: Yup.date().required("Required"),
   });
 
-  const handleSubmit = (values: any) => {
-    console.log(values);
+  const handleSubmit = async (values: any) => {
+    await onSubmit(values);
     handleClose();
   };
 
@@ -56,7 +59,7 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
               <FieldArray name="items">
                 {({ push, remove }) => (
                   <>
-                    {values.items.map((item: any[], index: number) => (
+                    {values.items.map((item: Item[], index: number) => (
                       <div key={index} className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">
                           Item Description

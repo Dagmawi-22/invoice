@@ -1,8 +1,15 @@
 export interface Invoice {
   id: string;
-  invoiceNumber: string;
-  clientName: string;
-  items: { description: string; amount: number }[];
+  items: Item[];
   totalAmount: number;
-  dueDate: string | Date;
+  dueDate: string;
+}
+
+export interface Item {
+  description: string;
+  amount: number;
+  id: string;
+  invoiceId: string;
+  createdAt: string;
+  updatedAt: string | null;
 }

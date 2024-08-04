@@ -8,6 +8,8 @@ import Button from "@/components/Button";
 import Header from "@/components/Header";
 import AddInvoiceModal from "@/components/InvoiceForm";
 import { IoIosAdd } from "react-icons/io";
+import SearchBar from "@/components/Searchbar";
+import { getInvoices } from "@/helpers/helper.service";
 
 const Home: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -18,41 +20,97 @@ const Home: React.FC = () => {
   const [invoiceData, setInvoiceData] = useState<Invoice | null>(null);
 
   const handleAddInvoice = () => {
-    setInvoiceData(null);
+    setInvoiceData(null); // Clear previous data for new invoice
     setShowModal(true);
   };
 
   const handleEditInvoice = (data: Invoice) => {
-    setInvoiceData(data);
+    setInvoiceData(data); // Set data for editing
     setShowModal(true);
   };
 
   const handleDeleteInvoice = async (invoiceId: string) => {
     if (window.confirm("Are you sure you want to delete this invoice?")) {
       try {
-        await fetch(`${API_BASE_URL}/invoices/${invoiceId}`, {
+        const response = await fetch(`${API_BASE_URL}/invoices/${invoiceId}`, {
           method: "DELETE",
         });
-        setInvoices((prev) =>
-          prev.filter((invoice) => invoice.id !== invoiceId)
-        );
+
+        if (response.ok) {
+          setInvoices((prev) =>
+            prev.filter((invoice) => invoice.id !== invoiceId)
+          );
+        } else {
+          console.error("Failed to delete invoice");
+        }
       } catch (error) {
         console.error("Failed to delete invoice", error);
       }
     }
   };
 
+  const handleModalSubmit = async (invoice: Invoice) => {
+    const updatedInvoice = {
+      ...invoice,
+      dueDate: new Date(invoice.dueDate.toLocaleString()),
+      items: invoice.items.map(
+        ({ id, createdAt, invoiceId, updatedAt, ...item }) => item
+      ),
+    };
+
+    try {
+      console.log("main");
+      if (invoiceData) {
+        // Update existing invoice
+        console.log("update");
+        const response = await fetch(
+          `${API_BASE_URL}/invoices/${invoiceData.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedInvoice),
+          }
+        );
+
+        if (response.ok) {
+          const updatedData = await response.json();
+          setInvoices((prev) =>
+            prev.map((inv) => (inv.id === updatedData.id ? updatedData : inv))
+          );
+        } else {
+          console.error("Failed to update invoice");
+        }
+      } else {
+        // Create new invoice
+        const response = await fetch(`${API_BASE_URL}/invoices`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedInvoice),
+        });
+
+        if (response.ok) {
+          const createdData = await response.json();
+          setInvoices((prev) => [...prev, createdData]);
+        } else {
+          console.error("Failed to create invoice");
+        }
+      }
+      setShowModal(false);
+      setInvoiceData(null);
+    } catch (error) {
+      console.error("Failed to save invoice", error);
+    }
+  };
+
   useEffect(() => {
     const fetchInvoices = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/invoices`);
-        const data: Invoice[] = await response.json();
-        setInvoices(data);
-      } catch (error) {
-        console.error("Failed to fetch invoices", error);
-      } finally {
-        setLoading(false);
-      }
+      const data = await getInvoices();
+      setInvoices(data);
+      setLoading(false);
     };
 
     fetchInvoices();
@@ -69,14 +127,8 @@ const Home: React.FC = () => {
   return (
     <>
       <Header />
-      <div className="flex justify-between items-center p-4">
-        <input
-          type="text"
-          placeholder="Filter by id"
-          value={filterText}
-          onChange={(e) => setFilterText(e.target.value)}
-          className="border h-9 border-gray-300 p-2 rounded text-black transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transform focus:scale-105 shadow-lg"
-        />
+      <div className="flex justify-between items-center p-8">
+        <SearchBar value={filterText} onChange={setFilterText} />
         <Button variant="primary" size="small" onClick={handleAddInvoice}>
           <div className="flex flex-row gap-1">
             <IoIosAdd />
@@ -97,6 +149,7 @@ const Home: React.FC = () => {
         show={showModal}
         handleClose={() => setShowModal(false)}
         initialData={invoiceData}
+        onSubmit={handleModalSubmit}
       />
     </>
   );

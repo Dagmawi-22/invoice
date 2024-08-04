@@ -1,24 +1,21 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React from "react";
 import DataTable from "react-data-table-component";
 import { Invoice } from "@/app/interfaces/interface";
-import Button from "@/components/Button";
-import { GrEdit } from "react-icons/gr";
-import { RiDeleteBin6Fill } from "react-icons/ri";
 import dayjs from "dayjs";
+import Button from "./Button";
+import { MdDeleteOutline, MdModeEditOutline } from "react-icons/md";
 
-const InvoiceTable: React.FC<{
+interface InvoiceTableProps {
   invoices: Invoice[];
   onEdit: (invoice: Invoice) => void;
   onDelete: (invoiceId: string) => void;
-}> = ({ invoices, onEdit, onDelete }) => {
-  const [mounted, setMounted] = useState(false);
+}
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+const InvoiceTable: React.FC<InvoiceTableProps> = ({
+  invoices,
+  onEdit,
+  onDelete,
+}) => {
   const columns = [
     { name: "Invoice Number", selector: (row: Invoice) => row.id },
     {
@@ -30,25 +27,25 @@ const InvoiceTable: React.FC<{
     {
       name: "Due Date",
       selector: (row: Invoice) =>
-        dayjs(new Date(row.dueDate)).format("MMM D, YYYY, HH:mm:ss a"),
+        dayjs(new Date(row.dueDate)).format("MMM D, YYYY HH:mm a"),
     },
     {
       name: "Actions",
       cell: (row: Invoice) => (
         <div className="flex space-x-2">
-          <Button variant="primary" size="small" onClick={() => onEdit(row)}>
+          <Button size="small" variant="primary" onClick={() => onEdit(row)}>
             <div className="flex flex-row gap-1">
-              <GrEdit />
+              <MdModeEditOutline />
               <span className="text-xs">Edit</span>
             </div>
           </Button>
           <Button
-            variant="danger"
             size="small"
+            variant="danger"
             onClick={() => onDelete(row.id)}
           >
             <div className="flex flex-row gap-1">
-              <RiDeleteBin6Fill />
+              <MdDeleteOutline />
               <span className="text-xs">Delete</span>
             </div>
           </Button>
@@ -57,19 +54,13 @@ const InvoiceTable: React.FC<{
     },
   ];
 
-  if (!mounted) {
-    return null;
-  }
-
   return (
-    <div>
-      <DataTable
-        columns={columns}
-        data={invoices}
-        pagination
-        className="shadow-lg rounded-md"
-      />
-    </div>
+    <DataTable
+      columns={columns}
+      data={invoices}
+      pagination
+      className="shadow-lg rounded-md"
+    />
   );
 };
 
