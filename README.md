@@ -16,6 +16,8 @@
 - Prisma - for interacting with the PostgreSql database
 - PostgreSql - for storing data
 - Swagger - for documenting the Nest.js API
+- jspdf - to extract html content as printable pdf
+- xlsx - to export set of data as an excel file
 
 ### How to run the app locally
 
