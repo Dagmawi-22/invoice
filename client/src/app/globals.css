@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap");
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -19,6 +21,7 @@
 body {
   color: rgb(var(--foreground-rgb));
   background-color: #f1f1f1;
+  font-family: "Raleway", sans-serif; /* Apply the font here */
 }
 
 @layer utilities {

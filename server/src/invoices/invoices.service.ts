@@ -67,13 +67,25 @@ export class InvoicesService {
   }
 
   async remove(id: string) {
-    const invoice = await this.prisma.invoice.delete({
+    const invoiceToDelete = await this.prisma.invoice.findUnique({
       where: { id },
-      include: {
-        items: true,
+      include: { items: true },
+    });
+
+    if (!invoiceToDelete) {
+      throw new Error(`Invoice with id ${id} not found`);
+    }
+
+    await this.prisma.item.deleteMany({
+      where: {
+        invoiceId: id,
       },
     });
 
-    return invoice;
+    const deletedInvoice = await this.prisma.invoice.delete({
+      where: { id },
+    });
+
+    return deletedInvoice;
   }
 }
