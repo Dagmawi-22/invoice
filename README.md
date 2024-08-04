@@ -43,7 +43,7 @@ Finally, start the app:
 ```bash
 yarn start dev
 ```
-then, cd into the client folder:
+then, cd into the client folder using a new terminal window:
 
 ```bash
 cd ../client
