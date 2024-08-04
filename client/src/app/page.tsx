@@ -1,38 +1,50 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import InvoiceTable from "../components/InvoiceTable";
 import { Invoice } from "./interfaces/interface";
-
-const sampleInvoices: Invoice[] = [
-  {
-    invoiceNumber: "INV-001",
-    clientName: "Client A",
-    items: [
-      { description: "Item 1", amount: 100 },
-      { description: "Item 2", amount: 200 },
-    ],
-    totalAmount: 300,
-    dueDate: "2024-08-01",
-  },
-  {
-    invoiceNumber: "INV-002",
-    clientName: "Client B",
-    items: [
-      { description: "Item 1", amount: 150 },
-      { description: "Item 2", amount: 250 },
-    ],
-    totalAmount: 400,
-    dueDate: "2024-09-01",
-  },
-];
+import API_BASE_URL from "../../public/config";
 
 const Home: React.FC = () => {
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/invoices`);
+        console.log("dataa", response?.json());
+        const data: Invoice[] = await response.json();
+        setInvoices(data);
+      } catch (error) {
+        console.error("Failed to fetch invoices", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInvoices();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold text-center my-4 text-gray-700">
-        Invoice Listing
-      </h1>
-      <InvoiceTable invoices={sampleInvoices} />
-    </div>
+    <>
+      <header className="bg-indigo-600 text-white p-4 shadow-lg">
+        <div className="container mx-auto flex items-center justify-between">
+          <div className="flex items-center">
+            <span className="text-2xl font-bold">INVOICE</span>
+          </div>
+          <nav className="flex space-x-4"></nav>
+        </div>
+      </header>
+
+      <div className="p-8">
+        <InvoiceTable invoices={invoices} />
+      </div>
+    </>
   );
 };
 
