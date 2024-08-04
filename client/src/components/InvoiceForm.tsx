@@ -74,10 +74,13 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
                           placeholder="Item Description"
                           className="border border-gray-300 text-black rounded p-2 w-full mb-2"
                         />
-                        {errors.items?.[index]?.description &&
+                        {(errors.items as any)?.[index]?.description &&
                           touched.items?.[index]?.description && (
                             <div className="text-red-500 text-sm">
-                              {errors.items[index].description as ReactNode}
+                              {
+                                (errors.items as any)[index]
+                                  .description as ReactNode
+                              }
                             </div>
                           )}
 
@@ -90,10 +93,13 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
                           placeholder="Quantity"
                           className="border border-gray-300 text-black rounded p-2 w-full mb-2"
                         />
-                        {errors.items?.[index]?.quantity &&
+                        {(errors.items as any)?.[index]?.quantity &&
                           touched.items?.[index]?.quantity && (
                             <div className="text-red-500 text-sm">
-                              {errors.items[index].quantity as ReactNode}
+                              {
+                                (errors.items as any)[index]
+                                  .quantity as ReactNode
+                              }
                             </div>
                           )}
 
@@ -106,10 +112,10 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
                           placeholder="Price"
                           className="border border-gray-300 text-black rounded p-2 w-full mb-2"
                         />
-                        {errors.items?.[index]?.price &&
+                        {(errors.items as any)?.[index]?.price &&
                           touched.items?.[index]?.price && (
                             <div className="text-red-500 text-sm">
-                              {errors.items[index].price as ReactNode}
+                              {(errors.items as any)[index].price as ReactNode}
                             </div>
                           )}
 

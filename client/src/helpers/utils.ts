@@ -50,7 +50,7 @@ const getTotalAmount = (data: Invoice) => {
 
 export const handleExportToPDF = (data: Invoice) => {
   const invoice = getTotalAmount(data);
-  const doc = new jsPDF();
+  const doc = new jsPDF() as any;
 
   doc.setFont("Roboto", "normal");
 
