@@ -148,7 +148,7 @@ const Home: React.FC = () => {
           <Button variant="primary" size="small" onClick={handleAddInvoice}>
             <div className="flex flex-row gap-1">
               <IoIosAdd />
-              <span className="text-xs">Add invoice</span>
+              <span className="text-xs">Add</span>
             </div>
           </Button>
         </div>
