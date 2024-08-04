@@ -1,11 +1,11 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Formik, Field, FieldArray, Form as FormikForm } from "formik";
 import * as Yup from "yup";
 
 interface AddInvoiceModalProps {
   show: boolean;
   handleClose: () => void;
-  initialData: any; // Adjust type as needed
+  initialData: any;
 }
 
 const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
@@ -13,7 +13,6 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
   handleClose,
   initialData,
 }) => {
-  // Define initial values and validation schema
   const initialValues = {
     items: initialData?.items || [{ description: "", quantity: 1, price: 0 }],
     totalAmount: initialData?.totalAmount || 0,
@@ -30,16 +29,16 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
         price: Yup.number().required("Required").min(0, "Must be at least 0"),
       })
     ),
-    totalAmount: Yup.number().required("Required"),
+    totalAmount: Yup.number().required("Required").min(1, "Must be at least 1"),
     dueDate: Yup.date().required("Required"),
   });
 
   const handleSubmit = (values: any) => {
     console.log(values);
-    handleClose(); // Close the modal after submit
+    handleClose();
   };
 
-  if (!show) return null; // Don't render if not shown
+  if (!show) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -52,12 +51,12 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ values }) => (
+          {({ values, errors, touched }) => (
             <FormikForm>
               <FieldArray name="items">
                 {({ push, remove }) => (
                   <>
-                    {values.items.map((item: any, index: number) => (
+                    {values.items.map((item: any[], index: number) => (
                       <div key={index} className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">
                           Item Description
@@ -67,6 +66,12 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
                           placeholder="Item Description"
                           className="border border-gray-300 text-black rounded p-2 w-full mb-2"
                         />
+                        {errors.items?.[index]?.description &&
+                          touched.items?.[index]?.description && (
+                            <div className="text-red-500 text-sm">
+                              {errors.items[index].description as ReactNode}
+                            </div>
+                          )}
 
                         <label className="block text-sm font-medium text-gray-700">
                           Quantity
@@ -77,6 +82,12 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
                           placeholder="Quantity"
                           className="border border-gray-300 text-black rounded p-2 w-full mb-2"
                         />
+                        {errors.items?.[index]?.quantity &&
+                          touched.items?.[index]?.quantity && (
+                            <div className="text-red-500 text-sm">
+                              {errors.items[index].quantity as ReactNode}
+                            </div>
+                          )}
 
                         <label className="block text-sm font-medium text-gray-700">
                           Price
@@ -87,6 +98,12 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
                           placeholder="Price"
                           className="border border-gray-300 text-black rounded p-2 w-full mb-2"
                         />
+                        {errors.items?.[index]?.price &&
+                          touched.items?.[index]?.price && (
+                            <div className="text-red-500 text-sm">
+                              {errors.items[index].price as ReactNode}
+                            </div>
+                          )}
 
                         <button
                           type="button"
@@ -118,6 +135,11 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
                 placeholder="Total Amount"
                 className="border border-gray-300 text-black rounded p-2 w-full mb-4"
               />
+              {errors.totalAmount && touched.totalAmount && (
+                <div className="text-red-500 text-sm">
+                  {errors.totalAmount as ReactNode}
+                </div>
+              )}
 
               <label className="block text-sm font-medium text-gray-700">
                 Due Date
@@ -127,6 +149,11 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
                 type="date"
                 className="border border-gray-300 text-black rounded p-2 w-full mb-4"
               />
+              {errors.dueDate && touched.dueDate && (
+                <div className="text-red-500 text-sm">
+                  {errors.dueDate as ReactNode}
+                </div>
+              )}
 
               <div className="flex justify-between">
                 <button

@@ -7,6 +7,7 @@ import API_BASE_URL from "../../public/config";
 import Button from "@/components/Button";
 import Header from "@/components/Header";
 import AddInvoiceModal from "@/components/InvoiceForm";
+import { IoIosAdd } from "react-icons/io";
 
 const Home: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -14,16 +15,31 @@ const Home: React.FC = () => {
   const [filterText, setFilterText] = useState("");
 
   const [showModal, setShowModal] = useState(false);
-  const [invoiceData, setInvoiceData] = useState(null);
+  const [invoiceData, setInvoiceData] = useState<Invoice | null>(null);
 
   const handleAddInvoice = () => {
     setInvoiceData(null); // Clear data for new invoice
     setShowModal(true);
   };
 
-  const handleEditInvoice = (data: any) => {
+  const handleEditInvoice = (data: Invoice) => {
     setInvoiceData(data); // Set data for editing
     setShowModal(true);
+  };
+
+  const handleDeleteInvoice = async (invoiceId: string) => {
+    if (window.confirm("Are you sure you want to delete this invoice?")) {
+      try {
+        await fetch(`${API_BASE_URL}/invoices/${invoiceId}`, {
+          method: "DELETE",
+        });
+        setInvoices((prev) =>
+          prev.filter((invoice) => invoice.id !== invoiceId)
+        );
+      } catch (error) {
+        console.error("Failed to delete invoice", error);
+      }
+    }
   };
 
   useEffect(() => {
@@ -31,7 +47,6 @@ const Home: React.FC = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/invoices`);
         const data: Invoice[] = await response.json();
-        console.log("dataa", data);
         setInvoices(data);
       } catch (error) {
         console.error("Failed to fetch invoices", error);
@@ -60,15 +75,22 @@ const Home: React.FC = () => {
           placeholder="Filter by id"
           value={filterText}
           onChange={(e) => setFilterText(e.target.value)}
-          className="border h-9 border-gray-300 p-2 rounded-lg text-black transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transform focus:scale-105 shadow-lg"
+          className="border h-9 border-gray-300 p-2 rounded text-black transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transform focus:scale-105 shadow-lg"
         />
         <Button variant="primary" size="small" onClick={handleAddInvoice}>
-          Add Invoice
+          <div className="flex flex-row gap-1">
+            <IoIosAdd />
+            <span className="text-xs">Add Invoice</span>
+          </div>
         </Button>
       </div>
 
       <div className="p-8">
-        <InvoiceTable invoices={filteredInvoices} />
+        <InvoiceTable
+          invoices={filteredInvoices}
+          onEdit={handleEditInvoice}
+          onDelete={handleDeleteInvoice}
+        />
       </div>
 
       <AddInvoiceModal
