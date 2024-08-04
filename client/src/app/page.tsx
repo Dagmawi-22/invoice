@@ -1,4 +1,3 @@
-// pages/index.tsx
 import React from "react";
 import InvoiceTable from "../components/InvoiceTable";
 import { Invoice } from "./interfaces/interface";
