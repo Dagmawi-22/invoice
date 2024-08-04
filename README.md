@@ -42,11 +42,11 @@ then, cd into the server folder:
 ```bash
 cd invoice/server
 ```
-Then, install the required libraries:
+then, install the required libraries:
 ```bash
 yarn install
 ```
-Finally, start the app:
+then, start the app:
 ```bash
 yarn start dev
 ```
@@ -55,7 +55,7 @@ then, cd into the client folder using a new terminal window:
 ```bash
 cd ../client
 ```
-Then, install the required libraries:
+then, install the required libraries:
 ```bash
 yarn install
 ```
