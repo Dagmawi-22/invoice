@@ -45,13 +45,13 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
           >
             <div className="flex flex-row gap-1">
               <BiPrinter />
-              <span className="text-xs">Print</span>
+              <span className="text-xs text-nowrap">Print</span>
             </div>
           </Button>
           <Button size="small" variant="primary" onClick={() => onEdit(row)}>
             <div className="flex flex-row gap-1">
               <MdModeEditOutline />
-              <span className="text-xs">Edit</span>
+              <span className="text-xs text-nowrap">Edit</span>
             </div>
           </Button>
 
@@ -62,7 +62,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
           >
             <div className="flex flex-row gap-1">
               <MdDeleteOutline />
-              <span className="text-xs">Delete</span>
+              <span className="text-xs text-nowrap">Delete</span>
             </div>
           </Button>
         </div>
