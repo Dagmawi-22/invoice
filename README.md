@@ -1,7 +1,12 @@
 # invoice
 
-### A simple Next.js, Tailwind Css, Nest.js, Prisma, PostgreSql app with an invoice management feature including: creating an invoice from items, updaeting an invoice, export invoices as excel & export an invoice as a printable Pdf.
-![image](https://github.com/Dagmawi-22/retiktok/assets/109204719/fedab553-70de-4b88-bd97-31498e1b0742) ![image](https://github.com/Dagmawi-22/retiktok/assets/109204719/078c0bb6-65a7-478d-9b4b-41913eb3b87c) ![image](https://github.com/Dagmawi-22/retiktok/assets/109204719/8bea965c-6dc9-43b9-b9ad-ae4493bee491)
+#### A simple Next.js, Tailwind Css, Nest.js, Prisma, PostgreSql app with an invoice management feature including: creating an invoice from items, updaeting an invoice, export invoices as excel & export an invoice as a printable Pdf.
+![image](https://github.com/user-attachments/assets/aa1961b0-733c-4dd0-b497-e3a10bc55c38)
+![image](https://github.com/user-attachments/assets/bd37be4d-2239-4674-8ff7-828332cb032e)
+![image](https://github.com/user-attachments/assets/124f39a1-6eaa-458a-a492-4654dea67b7a)
+
+
+
 
 # Tools used
 
