@@ -32,7 +32,6 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
         price: Yup.number().required("Required").min(0, "Must be at least 0"),
       })
     ),
-    totalAmount: Yup.number().required("Required").min(1, "Must be at least 1"),
     dueDate: Yup.date().required("Required"),
   });
 
@@ -135,21 +134,6 @@ const AddInvoiceModal: React.FC<AddInvoiceModalProps> = ({
                   </>
                 )}
               </FieldArray>
-
-              <label className="block text-sm font-medium text-gray-700">
-                Total Amount
-              </label>
-              <Field
-                name="totalAmount"
-                type="number"
-                placeholder="Total Amount"
-                className="border border-gray-300 text-black rounded p-2 w-full mb-4"
-              />
-              {errors.totalAmount && touched.totalAmount && (
-                <div className="text-red-500 text-sm">
-                  {errors.totalAmount as ReactNode}
-                </div>
-              )}
 
               <label className="block text-sm font-medium text-gray-700">
                 Due Date

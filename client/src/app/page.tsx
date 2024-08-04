@@ -57,13 +57,15 @@ const Home: React.FC = () => {
       items: invoice.items.map(
         ({ id, createdAt, invoiceId, updatedAt, ...item }) => item
       ),
+      totalAmount: invoice.items.reduce((sum, item) => {
+        return sum + item.price * item.quantity;
+      }, 0),
     };
 
     try {
       console.log("main");
       if (invoiceData) {
         // Update existing invoice
-        console.log("update");
         const response = await fetch(
           `${API_BASE_URL}/invoices/${invoiceData.id}`,
           {
