@@ -30,10 +30,6 @@ const Home: React.FC = () => {
     setShowModal(true);
   };
 
-  const handlePrintInvoice = (id: string) => {
-    console.log("yeye");
-  };
-
   const handleDeleteInvoice = async (invoiceId: string) => {
     if (window.confirm("Are you sure you want to delete this invoice?")) {
       try {
@@ -160,7 +156,6 @@ const Home: React.FC = () => {
           invoices={filteredInvoices}
           onEdit={handleEditInvoice}
           onDelete={handleDeleteInvoice}
-          onPrint={handlePrintInvoice}
         />
       </div>
 

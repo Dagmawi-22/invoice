@@ -4,21 +4,19 @@ import { Invoice } from "@/app/interfaces/interface";
 import dayjs from "dayjs";
 import Button from "./Button";
 import { MdDeleteOutline, MdModeEditOutline } from "react-icons/md";
-import { formatCurrency } from "@/helpers/utils";
+import { formatCurrency, handleExportToPDF } from "@/helpers/utils";
 import { BiPrinter } from "react-icons/bi";
 
 interface InvoiceTableProps {
   invoices: Invoice[];
   onEdit: (invoice: Invoice) => void;
   onDelete: (invoiceId: string) => void;
-  onPrint: (invoiceId: string) => void;
 }
 
 const InvoiceTable: React.FC<InvoiceTableProps> = ({
   invoices,
   onEdit,
   onDelete,
-  onPrint,
 }) => {
   const columns = [
     { name: "Invoice Number", selector: (row: Invoice) => row.id },
@@ -43,7 +41,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
           <Button
             size="small"
             variant="secondary"
-            onClick={() => onPrint(row.id)}
+            onClick={() => handleExportToPDF(row)}
           >
             <div className="flex flex-row gap-1">
               <BiPrinter />
