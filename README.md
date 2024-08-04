@@ -62,7 +62,7 @@ Finally, start the app:
 yarn dev
 ```
 
-Finally, open your preferred browser and at http://localhost:3000 and browse through the app.
+Finally, open your preferred browser at http://localhost:3000 and browse through the app.
 Thank you!
 
 
