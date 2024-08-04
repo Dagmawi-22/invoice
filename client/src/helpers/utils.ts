@@ -35,7 +35,21 @@ export const handleExportToExcel = (invoices: Invoice[]) => {
   document.body.removeChild(link);
 };
 
-export const handleExportToPDF = (invoice: Invoice) => {
+const getTotalAmount = (data: Invoice) => {
+  return {
+    ...data,
+    dueDate: new Date(data.dueDate.toLocaleString()),
+    items: data.items.map(
+      ({ id, createdAt, invoiceId, updatedAt, ...item }) => item
+    ),
+    totalAmount: data.items.reduce((sum, item) => {
+      return sum + item.price * item.quantity;
+    }, 0),
+  };
+};
+
+export const handleExportToPDF = (data: Invoice) => {
+  const invoice = getTotalAmount(data);
   const doc = new jsPDF();
 
   doc.setFont("Roboto", "normal");
