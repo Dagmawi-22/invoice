@@ -46,6 +46,12 @@ then, install the required libraries:
 ```bash
 yarn install
 ```
+
+then, customize your .env variables & run the migrations and generate your prisma client:
+```bash
+npx prisma migrate dev
+```
+
 then, start the app:
 ```bash
 yarn start dev
