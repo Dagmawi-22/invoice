@@ -8,9 +8,14 @@ import Button from "@/components/Button";
 import Header from "@/components/Header";
 import AddInvoiceModal from "@/components/InvoiceForm";
 import { IoIosAdd } from "react-icons/io";
-import { FaFileExport } from "react-icons/fa"
+import { FaFileExport } from "react-icons/fa";
 import SearchBar from "@/components/Searchbar";
-import { getInvoices } from "@/helpers/helper.service";
+import {
+  createInvoice,
+  deleteInvoice,
+  getInvoices,
+  updateInvoice,
+} from "@/helpers/helper.service";
 import { handleExportToExcel } from "@/helpers/utils";
 
 const Home: React.FC = () => {
@@ -34,17 +39,10 @@ const Home: React.FC = () => {
   const handleDeleteInvoice = async (invoiceId: string) => {
     if (window.confirm("Are you sure you want to delete this invoice?")) {
       try {
-        const response = await fetch(`${API_BASE_URL}/invoices/${invoiceId}`, {
-          method: "DELETE",
-        });
-
-        if (response.ok) {
-          setInvoices((prev) =>
-            prev.filter((invoice) => invoice.id !== invoiceId)
-          );
-        } else {
-          console.error("Failed to delete invoice");
-        }
+        const response = await deleteInvoice(invoiceId);
+        setInvoices((prev) =>
+          prev.filter((invoice) => invoice.id !== invoiceId)
+        );
       } catch (error) {
         console.error("Failed to delete invoice", error);
       }
@@ -67,39 +65,20 @@ const Home: React.FC = () => {
       console.log("main");
       if (invoiceData) {
         // Update existing invoice
-        const response = await fetch(
-          `${API_BASE_URL}/invoices/${invoiceData.id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedInvoice),
-          }
-        );
+        const response = await updateInvoice(invoiceData.id, updatedInvoice);
 
-        if (response.ok) {
-          const updatedData = await response.json();
-
+        if (response) {
           setInvoices((prev) =>
-            prev.map((inv) => (inv.id === updatedData.id ? updatedData : inv))
+            prev.map((inv) => (inv.id === response.id ? response : inv))
           );
         } else {
           console.error("Failed to update invoice");
         }
       } else {
         // Create new invoice
-        const response = await fetch(`${API_BASE_URL}/invoices`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedInvoice),
-        });
-
-        if (response.ok) {
-          const createdData = await response.json();
-          setInvoices((prev) => [...prev, createdData]);
+        const response = await createInvoice(updatedInvoice);
+        if (response) {
+          setInvoices((prev) => [...prev, response]);
         } else {
           console.error("Failed to create invoice");
         }
@@ -132,19 +111,9 @@ const Home: React.FC = () => {
   return (
     <>
       <Header />
-      <div className="flex justify-between items-center p-8">
+      <div className="flex justify-between flex-wrap items-center p-8">
         <SearchBar value={filterText} onChange={setFilterText} />
-        <div className="flex flex-row gap-2">
-          <Button
-            variant="secondary"
-            size="small"
-            onClick={() => {filteredInvoices?.length>0 && handleExportToExcel(filteredInvoices)}}
-          >
-            <div className="flex flex-row gap-1">
-               <FaFileExport />
-              <span className="text-xs">Export</span>
-            </div>
-          </Button>
+        <div className="flex flex-row gap-2 mt-2">
           <Button variant="primary" size="small" onClick={handleAddInvoice}>
             <div className="flex flex-row gap-1">
               <IoIosAdd />
@@ -154,7 +123,25 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-8">
+      {!!filteredInvoices.length && (
+        <div className="flex justify-end px-8 py-3">
+          <Button
+            variant="secondary"
+            size="small"
+            onClick={() => {
+              filteredInvoices?.length > 0 &&
+                handleExportToExcel(filteredInvoices);
+            }}
+          >
+            <div className="flex flex-row gap-1">
+              <FaFileExport />
+              <span className="text-xs">Export</span>
+            </div>
+          </Button>
+        </div>
+      )}
+
+      <div className="px-8 py-2">
         <InvoiceTable
           invoices={filteredInvoices}
           onEdit={handleEditInvoice}

@@ -2,7 +2,7 @@ export interface Invoice {
   id: string;
   items: Item[];
   totalAmount: number;
-  dueDate: string;
+  dueDate: string | Date;
   createdAt: string;
   updatedAt: string | null;
 }
@@ -14,7 +14,7 @@ export interface ItemForm {
 }
 
 export interface Item extends ItemForm {
-  id: string;
+  id?: string;
   amount?: number;
   invoiceId?: string;
   createdAt?: string;
